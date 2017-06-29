@@ -1,0 +1,35 @@
+<com.wyj.viewdraglayout.DragLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textview1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="#FFDCD665"
+        android:gravity="center"
+        android:text="可直接拖动的View" />
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="#FFDCD665"
+        android:gravity="center"
+        android:text="触摸边界可拖动的View" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="10dp"
+        android:background="#FFDCD665"
+        android:gravity="center"
+        android:text="Button" />
+
+
+</com.wyj.viewdraglayout.DragLayout>

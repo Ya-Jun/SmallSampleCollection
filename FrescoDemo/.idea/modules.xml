@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../DragLayout/DragLayout.iml" filepath="$PROJECT_DIR$/../DragLayout/DragLayout.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FrescoDemo.iml" filepath="$PROJECT_DIR$/FrescoDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../MyApplication.iml" filepath="$PROJECT_DIR$/../MyApplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../PileLayout/PileLayout.iml" filepath="$PROJECT_DIR$/../PileLayout/PileLayout.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../RippleBackground/RippleBackground.iml" filepath="$PROJECT_DIR$/../RippleBackground/RippleBackground.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../SwitchButton/SwitchButton.iml" filepath="$PROJECT_DIR$/../SwitchButton/SwitchButton.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../app/app.iml" filepath="$PROJECT_DIR$/../app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../app2/app2.iml" filepath="$PROJECT_DIR$/../app2/app2.iml" />
+    </modules>
+  </component>
+</project>

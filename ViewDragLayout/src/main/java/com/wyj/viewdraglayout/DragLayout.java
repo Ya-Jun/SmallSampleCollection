@@ -98,10 +98,14 @@ public class DragLayout extends LinearLayout {
         public void onViewReleased(View releasedChild, float xvel, float yvel) {
             // 向下，向右为正，否则为负
             if (yvel > 0) {
-                smoothToBottom(releasedChild);
+                if (releasedChild == mDragView3) {
+                    smoothToBottom(releasedChild);
+                }
                 Toast.makeText(getContext(), "释放时，速度向下大于0", Toast.LENGTH_SHORT).show();
             } else if (yvel < 0) {
-                smoothToTop(releasedChild);
+                if (releasedChild == mDragView3) {
+                    smoothToTop(releasedChild);
+                }
                 Toast.makeText(getContext(), "释放时，速度向上大于0", Toast.LENGTH_SHORT).show();
             }
         }
@@ -138,7 +142,7 @@ public class DragLayout extends LinearLayout {
         @Override
         public void onEdgeDragStarted(int edgeFlags, int pointerId) {
             dragHelper.captureChildView(mDragView2, pointerId);
-            dragHelper.captureChildView(mDragView3, pointerId);
+//            dragHelper.captureChildView(mDragView3, pointerId);
         }
 
         /**
@@ -153,7 +157,7 @@ public class DragLayout extends LinearLayout {
         }
 
         /**
-         * 该view水平方向拖动的范围(子控件消耗点击事件，例如按钮时候才回调)
+         * 该view水平方向拖动的范围(子控件消耗点击事件时候才回调（例如：按钮）)
          * @param child
          * @return
          */
@@ -163,7 +167,7 @@ public class DragLayout extends LinearLayout {
         }
 
         /**
-         * 该view垂直方向拖动的范围(子控件消耗点击事件，例如按钮时候才回调)
+         * 该view垂直方向拖动的范围(子控件消耗点击事件时候才回调（例如：按钮）)
          * @param child
          * @return
          */

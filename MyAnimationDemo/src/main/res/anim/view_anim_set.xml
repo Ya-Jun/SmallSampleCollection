@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="2000">
+
+    <!-- pivotX fromXDelta 的值可以是数值、百分数、百分数p 三种格式，比如50、50%、50%p，
+         数值，表示在当前View的左上角，即原点处加上50px，做为X坐标；
+         50% ，表示在当前控件的左上角加上自己宽度的50%,做为X坐标；
+         50%p，表示在当前的左上角加上父控件宽度的50%,做为X坐标。 -->
+
+    <!-- 注意：android:repeatCount="-1" android:repeatMode="reverse"  在set标签设置无效，需要在各个动画节点放-->
+
+    <alpha
+        android:fromAlpha="1.0"
+        android:repeatCount="-1"
+        android:repeatMode="reverse"
+        android:toAlpha="0.0" />
+
+    <rotate
+        android:fromDegrees="0"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:repeatCount="-1"
+        android:repeatMode="reverse"
+        android:toDegrees="360" />
+
+    <scale
+        android:fromXScale="1"
+        android:fromYScale="1"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:repeatCount="-1"
+        android:repeatMode="reverse"
+        android:toXScale="0"
+        android:toYScale="0" />
+
+    <translate
+        android:fromXDelta="-200%"
+        android:fromYDelta="0"
+        android:repeatCount="-1"
+        android:repeatMode="reverse"
+        android:toXDelta="200%"
+        android:toYDelta="0" />
+
+</set>

@@ -1,10 +1,10 @@
 package com.wyj.myapplication;
 
 import android.content.Context;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -13,8 +13,10 @@ import android.widget.FrameLayout;
 public class GestureSwitchLayout extends FrameLayout {
     private static final String TAG = "DragLayout";
     private ViewDragHelper dragHelper;
-    private View mDragView, contentView;
+    private View mDragView, contentView, contentView2;
     private int dragRange;
+    private OnViewDragStateChangedListener onViewDragStateChangedListener;
+    private boolean isInit = true;
 
     public GestureSwitchLayout(Context context) {
         super(context);
@@ -39,7 +41,12 @@ public class GestureSwitchLayout extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         mDragView = findViewById(R.id.rl);
-        contentView = findViewById(R.id.imageView2);
+        contentView = LayoutInflater.from(getContext()).inflate(R.layout.loading_view, null);
+        contentView2 = LayoutInflater.from(getContext()).inflate(R.layout.loading_view, null);
+        contentView.setId(R.id.imageView2);
+        contentView2.setId(R.id.imageView3);
+        addView(contentView);
+        addView(contentView2);
     }
 
     private ViewDragHelper.Callback callback = new ViewDragHelper.Callback() {
@@ -50,11 +57,8 @@ public class GestureSwitchLayout extends FrameLayout {
 
         @Override
         public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
-            if (dy > 0) {
-                contentView.layout(0, -(contentView.getHeight() - top), getWidth(), top);
-            } else if (dy < 0) {
-                contentView.layout(0, top + mDragView.getHeight(), getWidth(), top + mDragView.getHeight() + dragRange);
-            }
+            contentView2.layout(0, -(contentView2.getHeight() - top), getWidth(), top);
+            contentView.layout(0, top + mDragView.getHeight(), getWidth(), top + mDragView.getHeight() + dragRange);
         }
 
         @Override
@@ -78,6 +82,18 @@ public class GestureSwitchLayout extends FrameLayout {
                 smoothToRestore();
             }
         }
+
+        @Override
+        public void onViewDragStateChanged(int state) {
+            if (state == ViewDragHelper.STATE_DRAGGING) {
+
+            } else if (state == ViewDragHelper.STATE_IDLE) {
+                initLayout();
+            }
+            if (onViewDragStateChangedListener != null) {
+                onViewDragStateChangedListener.OnViewDragStateChanged(state);
+            }
+        }
     };
 
     @Override
@@ -89,17 +105,20 @@ public class GestureSwitchLayout extends FrameLayout {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        mDragView.layout(0, getHeight() - mDragView.getHeight(), getWidth(), getHeight());
-        contentView.layout(0, getHeight(), getWidth(), getHeight() + dragRange);
+        if (isInit) {
+            initLayout();
+//            isInit = false;
+        }
+    }
+
+    private void initLayout(){
+        mDragView.layout(0, 0, getWidth(), getHeight());
+        contentView.layout(0, getHeight(), getWidth(), getHeight() * 2);
+        contentView2.layout(0, -getHeight(), getWidth(), 0);
     }
 
     @Override
-    public boolean onInterceptHoverEvent(MotionEvent event) {
-        final int action = MotionEventCompat.getActionMasked(event);
-        if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
-            dragHelper.cancel();
-            return false;
-        }
+    public boolean onInterceptTouchEvent(MotionEvent event) {
         return dragHelper.shouldInterceptTouchEvent(event);
     }
 
@@ -133,5 +152,14 @@ public class GestureSwitchLayout extends FrameLayout {
             ViewCompat.postInvalidateOnAnimation(this);
         }
     }
+
+    public void setOnViewDragStateChangedListener(OnViewDragStateChangedListener onViewDragStateChangedListener) {
+        this.onViewDragStateChangedListener = onViewDragStateChangedListener;
+    }
+
+    public interface OnViewDragStateChangedListener {
+        void OnViewDragStateChanged(int state);
+    }
+
 }
 

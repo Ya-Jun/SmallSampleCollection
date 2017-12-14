@@ -1,1 +1,1 @@
-include ':ViewDragLayout', ':FrescoDemo', ':MyAnimationDemo'
+include ':ViewDragLayout', ':FrescoDemo', ':MyAnimationDemo', ':DragLayoutDemo'

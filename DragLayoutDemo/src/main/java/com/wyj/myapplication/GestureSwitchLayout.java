@@ -13,10 +13,8 @@ import android.widget.FrameLayout;
 public class GestureSwitchLayout extends FrameLayout {
     private static final String TAG = "DragLayout";
     private ViewDragHelper dragHelper;
-    private View mDragView, contentView, contentView2;
-    private int dragRange;
+    private View mDragView, contentView_bottom, contentView_top;
     private OnViewDragStateChangedListener onViewDragStateChangedListener;
-    private boolean isInit = true;
 
     public GestureSwitchLayout(Context context) {
         super(context);
@@ -41,12 +39,12 @@ public class GestureSwitchLayout extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         mDragView = findViewById(R.id.rl);
-        contentView = LayoutInflater.from(getContext()).inflate(R.layout.loading_view, null);
-        contentView2 = LayoutInflater.from(getContext()).inflate(R.layout.loading_view, null);
-        contentView.setId(R.id.imageView2);
-        contentView2.setId(R.id.imageView3);
-        addView(contentView);
-        addView(contentView2);
+        contentView_bottom = LayoutInflater.from(getContext()).inflate(R.layout.loading_view, null);
+        contentView_top = LayoutInflater.from(getContext()).inflate(R.layout.loading_view, null);
+        contentView_bottom.setId(R.id.imageView2);
+        contentView_top.setId(R.id.imageView3);
+        addView(contentView_bottom);
+        addView(contentView_top);
     }
 
     private ViewDragHelper.Callback callback = new ViewDragHelper.Callback() {
@@ -57,18 +55,17 @@ public class GestureSwitchLayout extends FrameLayout {
 
         @Override
         public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
-            contentView2.layout(0, -(contentView2.getHeight() - top), getWidth(), top);
-            contentView.layout(0, top + mDragView.getHeight(), getWidth(), top + mDragView.getHeight() + dragRange);
-        }
+//            contentView_top.layout(0, -(contentView_top.getHeight() - top), getWidth(), top);
+//            contentView_bottom.layout(0, top + mDragView.getHeight(), getWidth(), top + mDragView.getHeight() + contentView_bottom.getHeight());
 
-        @Override
-        public int clampViewPositionVertical(View child, int top, int dy) {
-            return top;
-        }
+            contentView_top.offsetTopAndBottom(dy);
+            contentView_bottom.offsetTopAndBottom(dy);
 
-        @Override
-        public int getViewVerticalDragRange(View child) {
-            return dragRange;
+            System.out.println("---------------------------------移动中top" + contentView_top.getTop());
+            System.out.println("---------------------------------移动中" + mDragView.getTop());
+            System.out.println("---------------------------------移动中bottom" + contentView_bottom.getTop());
+            System.out.println("---------------------------------");
+
         }
 
         @Override
@@ -88,33 +85,57 @@ public class GestureSwitchLayout extends FrameLayout {
             if (state == ViewDragHelper.STATE_DRAGGING) {
 
             } else if (state == ViewDragHelper.STATE_IDLE) {
+                System.out.println("---------------------------------还原" + contentView_top.getTop());
+                System.out.println("---------------------------------还原" + mDragView.getTop());
+                System.out.println("---------------------------------还原" + contentView_bottom.getTop());
+
                 initLayout();
+
+//                contentView_top.offsetTopAndBottom(-mDragView.getTop());
+//                contentView_bottom.offsetTopAndBottom(-mDragView.getTop());
+//                mDragView.offsetTopAndBottom(-mDragView.getTop());
+
+                System.out.println("---------------------------------还原完成上" + contentView_top.getTop());
+                System.out.println("---------------------------------还原完成中" + mDragView.getTop());
+                System.out.println("---------------------------------还原完成下" + contentView_bottom.getTop());
+
             }
             if (onViewDragStateChangedListener != null) {
                 onViewDragStateChangedListener.OnViewDragStateChanged(state);
             }
         }
+
+        @Override
+        public int clampViewPositionVertical(View child, int top, int dy) {
+            return top;
+        }
+
+        @Override
+        public int getViewVerticalDragRange(View child) {
+            return getMeasuredHeight();
+        }
     };
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        dragRange = contentView.getMeasuredHeight();
-    }
-
-    @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b);
-        if (isInit) {
+//        super.onLayout(changed, l, t, r, b);
+        if (changed) {
+            System.out.println("---------------------------------初始化");
             initLayout();
-//            isInit = false;
+        } else {
+            contentView_top.layout(0, contentView_top.getTop(), getWidth(), contentView_top.getTop() + getHeight());
+            mDragView.layout(0, mDragView.getTop(), getWidth(), mDragView.getTop() + getHeight());
+            contentView_bottom.layout(0, contentView_bottom.getTop(), getWidth(), contentView_bottom.getTop() + getHeight());
         }
+        System.out.println("---------------------------------onLayout上" + contentView_top.getTop());
+        System.out.println("---------------------------------onLayout中" + mDragView.getTop());
+        System.out.println("---------------------------------onLayout下" + contentView_bottom.getTop());
     }
 
-    private void initLayout(){
+    private void initLayout() {
         mDragView.layout(0, 0, getWidth(), getHeight());
-        contentView.layout(0, getHeight(), getWidth(), getHeight() * 2);
-        contentView2.layout(0, -getHeight(), getWidth(), 0);
+        contentView_bottom.layout(0, getHeight(), getWidth(), getHeight() * 2);
+        contentView_top.layout(0, -getHeight(), getWidth(), 0);
     }
 
     @Override
@@ -129,18 +150,21 @@ public class GestureSwitchLayout extends FrameLayout {
     }
 
     private void smoothToRestore() {
+        System.out.println("---------------------------------smoothToRestore");
         if (dragHelper.smoothSlideViewTo(mDragView, getPaddingLeft(), 0)) {
             ViewCompat.postInvalidateOnAnimation(this);
         }
     }
 
     private void smoothToTop() {
+        System.out.println("---------------------------------smoothToTop");
         if (dragHelper.smoothSlideViewTo(mDragView, getPaddingLeft(), -getHeight())) {
             ViewCompat.postInvalidateOnAnimation(this);
         }
     }
 
     private void smoothToBottom() {
+        System.out.println("---------------------------------smoothToBottom");
         if (dragHelper.smoothSlideViewTo(mDragView, getPaddingLeft(), getHeight())) {
             ViewCompat.postInvalidateOnAnimation(this);
         }

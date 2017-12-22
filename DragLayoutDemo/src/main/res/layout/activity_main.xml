@@ -15,11 +15,6 @@
             android:layout_height="match_parent"
             app:srcCompat="@mipmap/ic_launcher" />
 
-        <include
-            android:id="@+id/iv"
-            layout="@layout/loading_view"
-            android:visibility="gone" />
-
     </RelativeLayout>
 
 </com.wyj.myapplication.GestureSwitchLayout>

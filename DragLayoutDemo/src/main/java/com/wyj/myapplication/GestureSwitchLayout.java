@@ -7,13 +7,15 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 
 public class GestureSwitchLayout extends FrameLayout {
     private static final String TAG = "DragLayout";
     private ViewDragHelper dragHelper;
-    private View mDragView, contentView_bottom, contentView_top;
+    private View contentView_bottom, contentView_top, contentView_loading;
+    private ViewGroup mDragView;
     private OnViewDragStateChangedListener onViewDragStateChangedListener;
     public static final int STATE_IDLE_TOP = 1;
     public static final int STATE_IDLE_BOTTOM = 2;
@@ -41,12 +43,15 @@ public class GestureSwitchLayout extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         mDragView = findViewById(R.id.rl);
-        contentView_bottom = LayoutInflater.from(getContext()).inflate(R.layout.loading_view, null);
         contentView_top = LayoutInflater.from(getContext()).inflate(R.layout.loading_view, null);
-        contentView_bottom.setId(R.id.imageView2);
-        contentView_top.setId(R.id.imageView3);
+        contentView_loading = LayoutInflater.from(getContext()).inflate(R.layout.loading_view, null);
+        contentView_bottom = LayoutInflater.from(getContext()).inflate(R.layout.loading_view, null);
+        contentView_top.setId(R.id.imageView1);
+        contentView_loading.setId(R.id.imageView2);
+        contentView_bottom.setId(R.id.imageView3);
         addView(contentView_bottom);
         addView(contentView_top);
+        mDragView.addView(contentView_loading);
     }
 
     private ViewDragHelper.Callback callback = new ViewDragHelper.Callback() {

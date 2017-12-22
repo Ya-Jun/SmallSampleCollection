@@ -16,9 +16,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         gestureSwitchLayout = (GestureSwitchLayout) findViewById(R.id.gsl);
-        ImageView view1 = (ImageView) findViewById(R.id.imageView2);
+        ImageView view1 = (ImageView) findViewById(R.id.imageView1);
         ImageView view2 = (ImageView) findViewById(R.id.imageView3);
-        iv_loading = (ImageView) findViewById(R.id.iv);
+        iv_loading = (ImageView) findViewById(R.id.imageView2);
 
         view1.setBackgroundResource(R.drawable.bg_one);
         view2.setBackgroundResource(R.drawable.bg_two);
@@ -29,9 +29,9 @@ public class MainActivity extends AppCompatActivity {
             public void OnViewDragStateChanged(int state) {
                 iv_loading.setVisibility(View.VISIBLE);
                 if (state == GestureSwitchLayout.STATE_IDLE_TOP) {
-                    iv_loading.setBackgroundResource(R.drawable.bg_one);
-                } else if (state == GestureSwitchLayout.STATE_IDLE_BOTTOM) {
                     iv_loading.setBackgroundResource(R.drawable.bg_two);
+                } else if (state == GestureSwitchLayout.STATE_IDLE_BOTTOM) {
+                    iv_loading.setBackgroundResource(R.drawable.bg_one);
                 }
                 iv_loading.removeCallbacks(mRun);
                 iv_loading.postDelayed(mRun, 1500);

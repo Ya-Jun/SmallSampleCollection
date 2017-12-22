@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
                     iv_loading.setBackgroundResource(R.drawable.bg_two);
                 }
                 iv_loading.removeCallbacks(mRun);
-                iv_loading.postDelayed(mRun, 3000);
+                iv_loading.postDelayed(mRun, 1500);
             }
         });
 

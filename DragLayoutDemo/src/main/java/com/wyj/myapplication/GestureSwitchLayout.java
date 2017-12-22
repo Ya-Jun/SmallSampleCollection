@@ -76,9 +76,9 @@ public class GestureSwitchLayout extends FrameLayout {
         @Override
         public void onViewReleased(View releasedChild, float xvel, float yvel) {
             super.onViewReleased(releasedChild, xvel, yvel);
-            if (yvel > 0) {
+            if (yvel > 800) {
                 smoothToBottom();
-            } else if (yvel < 0) {
+            } else if (yvel < -800) {
                 smoothToTop();
             } else {
                 smoothToRestore();

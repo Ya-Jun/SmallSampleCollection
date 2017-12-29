@@ -133,8 +133,25 @@ public class GestureSwitchLayout extends FrameLayout {
         contentView_top.layout(0, -getHeight(), getWidth(), 0);
     }
 
+    private float downX;
+    private float downY;
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
+        // 只在垂直方向上处理
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            downX = event.getX();
+            downY = event.getY();
+        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            float moveX = event.getX();
+            float moveY = event.getY();
+            float adx = Math.abs(moveX - downX);
+            float ady = Math.abs(moveY - downY);
+            int slop = dragHelper.getTouchSlop();
+            if (ady > slop && adx > ady) {
+                dragHelper.cancel();
+                return super.onInterceptTouchEvent(event);
+            }
+        }
         return dragHelper.shouldInterceptTouchEvent(event);
     }
 

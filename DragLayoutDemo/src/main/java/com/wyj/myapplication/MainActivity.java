@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
                 } else if (state == GestureSwitchLayout.STATE_IDLE_BOTTOM) {
                     iv_loading.setBackgroundResource(R.drawable.bg_one);
                 }
+
+                // 模拟数据加载完成
                 iv_loading.removeCallbacks(mRun);
                 iv_loading.postDelayed(mRun, 1500);
             }
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         mRun = new Runnable() {
             @Override
             public void run() {
-                iv_loading.setVisibility(View.GONE);
+                gestureSwitchLayout.toRestore();
             }
         };
 

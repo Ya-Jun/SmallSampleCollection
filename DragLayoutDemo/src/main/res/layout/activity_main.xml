@@ -15,6 +15,12 @@
             android:layout_height="match_parent"
             app:srcCompat="@mipmap/ic_launcher" />
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:textColor="@color/colorPrimary"
+            android:layout_height="wrap_content" />
+
     </RelativeLayout>
 
 </com.wyj.myapplication.GestureSwitchLayout>

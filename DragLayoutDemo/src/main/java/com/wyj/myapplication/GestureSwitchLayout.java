@@ -20,6 +20,11 @@ public class GestureSwitchLayout extends FrameLayout {
     public static final int STATE_IDLE_TOP = 1;
     public static final int STATE_IDLE_BOTTOM = 2;
 
+    private boolean isScreenSizeChange = false;
+    private boolean isChanged = true;//此变量重要不可随意改动'
+    private boolean isStateSettling = false;
+    private int initHeight;
+
     public GestureSwitchLayout(Context context) {
         super(context);
         init();
@@ -42,7 +47,7 @@ public class GestureSwitchLayout extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mDragView = findViewById(R.id.rl);
+        mDragView = (ViewGroup) findViewById(R.id.rl);
         contentView_top = LayoutInflater.from(getContext()).inflate(R.layout.loading_view, null);
         contentView_loading = LayoutInflater.from(getContext()).inflate(R.layout.loading_view, null);
         contentView_bottom = LayoutInflater.from(getContext()).inflate(R.layout.loading_view, null);
@@ -52,6 +57,7 @@ public class GestureSwitchLayout extends FrameLayout {
         addView(contentView_bottom);
         addView(contentView_top);
         mDragView.addView(contentView_loading);
+        contentView_loading.setVisibility(GONE);
     }
 
     private ViewDragHelper.Callback callback = new ViewDragHelper.Callback() {
@@ -66,6 +72,7 @@ public class GestureSwitchLayout extends FrameLayout {
 //            contentView_bottom.layout(0, top + mDragView.getHeight(), getWidth(), top + mDragView.getHeight() + contentView_bottom.getHeight());
             contentView_top.offsetTopAndBottom(dy);
             contentView_bottom.offsetTopAndBottom(dy);
+            requestLayout();//低版本系统、不能及时刷新
 
             if (top == changedView.getHeight()) {//向下滑动停止
                 if (onViewDragStateChangedListener != null) {
@@ -78,29 +85,38 @@ public class GestureSwitchLayout extends FrameLayout {
             }
         }
 
-        @Override
-        public void onViewReleased(View releasedChild, float xvel, float yvel) {
-            super.onViewReleased(releasedChild, xvel, yvel);
-            if (yvel > 800) {
-                smoothToBottom();
-            } else if (yvel < -800) {
-                smoothToTop();
-            } else {
-                smoothToRestore();
-            }
-        }
+        // 如果通过滑动速度决定是否切换使用该方法，如果通过滑动位置决定是否切换使用onViewDragStateChanged
+//        @Override
+//        public void onViewReleased(View releasedChild, float xvel, float yvel) {
+//            super.onViewReleased(releasedChild, xvel, yvel);
+//            if (yvel > 800) {
+//                smoothToBottom();
+//            } else if (yvel < -800) {
+//                smoothToTop();
+//            } else {
+//                smoothToRestore();
+//            }
+//        }
 
         @Override
         public void onViewDragStateChanged(int state) {
-            if (state == ViewDragHelper.STATE_DRAGGING) {
-
-            } else if (state == ViewDragHelper.STATE_IDLE) {
-//                contentView_top.offsetTopAndBottom(-mDragView.getTop());
-//                contentView_bottom.offsetTopAndBottom(-mDragView.getTop());
-//                mDragView.offsetTopAndBottom(-mDragView.getTop());
-
-                // 滑动结束，还原各view位置到初始化状态
-                initLayout();
+            if (state == ViewDragHelper.STATE_IDLE) {
+                isStateSettling = false;
+                if (mDragView.getTop() > 350 && mDragView.getTop() < getHeight()) {
+                    smoothToBottom();
+                } else if (mDragView.getTop() < -250 && mDragView.getTop() > -getHeight()) {
+                    smoothToTop();
+                } else if (mDragView.getTop() < 350 && mDragView.getTop() > -250) {
+                    if (mDragView.getTop() != 0) {
+                        smoothToRestore();
+                    }
+                } else {
+//                    toRestore();
+                }
+            } else if (state == ViewDragHelper.STATE_SETTLING) {
+                isStateSettling = true;
+            } else {
+                isStateSettling = false;
             }
         }
 
@@ -117,13 +133,27 @@ public class GestureSwitchLayout extends FrameLayout {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-//        super.onLayout(changed, l, t, r, b);
-        if (changed) {
+        if (isChanged) {
             initLayout();
+            isChanged = false;
         } else {
-            contentView_top.layout(0, contentView_top.getTop(), getWidth(), contentView_top.getTop() + getHeight());
-            mDragView.layout(0, mDragView.getTop(), getWidth(), mDragView.getTop() + getHeight());
-            contentView_bottom.layout(0, contentView_bottom.getTop(), getWidth(), contentView_bottom.getTop() + getHeight());
+            if (changed) {
+                initLayout();
+            } else {
+                contentView_top.layout(0, contentView_top.getTop(), getWidth(), contentView_top.getTop() + getHeight());
+                mDragView.layout(0, mDragView.getTop(), getWidth(), mDragView.getTop() + getHeight());
+                contentView_bottom.layout(0, contentView_bottom.getTop(), getWidth(), contentView_bottom.getTop() + getHeight());
+            }
+        }
+
+        int currentHeight = getHeight();
+        if (initHeight < currentHeight) {
+            initHeight = currentHeight;
+        }
+        if (currentHeight < initHeight - 200) {//由于带虚拟返回键的手机，可以动态隐藏显示控制栏，导致getHeight高度有小于200的变化
+            isScreenSizeChange = true;
+        } else {
+            isScreenSizeChange = false;
         }
     }
 
@@ -133,10 +163,20 @@ public class GestureSwitchLayout extends FrameLayout {
         contentView_top.layout(0, -getHeight(), getWidth(), 0);
     }
 
+    public void toRestore() {
+        isChanged = true;
+        requestLayout();
+        contentView_loading.setVisibility(View.GONE);
+    }
+
     private float downX;
     private float downY;
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
+        if (isScreenSizeChange || isStateSettling) {
+            dragHelper.cancel();
+            return super.onInterceptTouchEvent(event);
+        }
         // 只在垂直方向上处理
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             downX = event.getX();
@@ -157,7 +197,9 @@ public class GestureSwitchLayout extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        dragHelper.processTouchEvent(event);
+        if (!isScreenSizeChange && !isStateSettling) {
+            dragHelper.processTouchEvent(event);
+        }
         return true;
     }
 

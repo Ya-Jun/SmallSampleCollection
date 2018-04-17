@@ -17,6 +17,7 @@
         </activity>
 
         <activity android:name=".ViewAnimation" />
+        <activity android:name=".DrawableAnimation" />
 
     </application>
 

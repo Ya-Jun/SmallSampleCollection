@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+    <item
+        android:drawable="@drawable/explode_1"
+        android:duration="80"></item>
+    <item
+        android:drawable="@drawable/explode_2"
+        android:duration="80"></item>
+    <item
+        android:drawable="@drawable/explode_3"
+        android:duration="80"></item>
+    <item
+        android:drawable="@drawable/explode_4"
+        android:duration="80"></item>
+    <item
+        android:drawable="@drawable/explode_5"
+        android:duration="80"></item>
+    <item
+        android:drawable="@drawable/explode_6"
+        android:duration="80"></item>
+    <item
+        android:drawable="@drawable/explode_7"
+        android:duration="80"></item>
+</animation-list>

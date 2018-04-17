@@ -35,7 +35,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(MainActivity.this, ViewAnimation.class);
             MainActivity.this.startActivity(intent);
         } else if (v == buttonDrawable) {
-
+            Intent intent = new Intent(MainActivity.this, DrawableAnimation.class);
+            MainActivity.this.startActivity(intent);
         } else if (v == buttonProperty) {
 
         }

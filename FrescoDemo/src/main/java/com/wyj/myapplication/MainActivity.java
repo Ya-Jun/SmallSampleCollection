@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,5 +33,13 @@ public class MainActivity extends AppCompatActivity {
         draweeView4.setImageURI(uri);
         draweeView5.setImageURI(uri);
         draweeView6.setImageURI("");
+
+        SimpleDraweeView draweeView7 = (SimpleDraweeView) findViewById(R.id.imageview7);
+        Uri uri2 = Uri.parse("");
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setUri(uri2)
+                .setAutoPlayAnimations(true)
+                .build();
+        draweeView7.setController(controller);
     }
 }

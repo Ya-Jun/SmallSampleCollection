@@ -50,31 +50,9 @@ public class EmojiconIndicatorView extends LinearLayout {
         setGravity(Gravity.CENTER_HORIZONTAL);
     }
 
-    public void init(int count) {
-        dotViews = new ArrayList<ImageView>();
-        for (int i = 0; i < count; i++) {
-            RelativeLayout rl = new RelativeLayout(context);
-            LayoutParams params = new LayoutParams(dotHeight, dotHeight);
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-            ImageView imageView = new ImageView(context);
-
-            if (i == 0) {
-                imageView.setImageBitmap(selectedBitmap);
-                rl.addView(imageView, layoutParams);
-            } else {
-                imageView.setImageBitmap(unselectedBitmap);
-                rl.addView(imageView, layoutParams);
-            }
-            this.addView(rl, params);
-            dotViews.add(imageView);
-        }
-    }
-
     public void updateIndicator(int count) {
         if (dotViews == null) {
-            return;
+            dotViews = new ArrayList<ImageView>();
         }
         for (int i = 0; i < dotViews.size(); i++) {
             if (i >= count) {

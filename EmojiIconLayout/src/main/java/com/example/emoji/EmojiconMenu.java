@@ -11,7 +11,6 @@ import android.view.View;
 import com.example.emojiiconlayout.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -55,22 +54,14 @@ public class EmojiconMenu extends EmojiconMenuBase {
         indicatorView = findViewById(R.id.indicator_view);
         tabBar = findViewById(R.id.tab_bar);
 
-//        emojiconGroupList = new ArrayList<>();
-//        pagerView.setPagerViewListener(new EmojiconPagerViewListener());
-//        pagerView.init(emojiconGroupList, emojiconColumns);
-//
-//        tabBar.setTabBarItemClickListener(new EmojiconScrollTabBar.EaseScrollTabBarItemClickListener() {
-//            @Override
-//            public void onItemClick(int position) {
-//                pagerView.setGroupPostion(position);
-//            }
-//        });
+        emojiconGroupList = new ArrayList<>();
+        pagerView.setPagerViewListener(new EmojiconPagerViewListener());
+        pagerView.init(emojiconGroupList, emojiconColumns);
 
-        // 添加默认表情
-        EmojiManager.getInstance().getDefaultEmojiData(new EmojiManager.OnUnzipSuccessListener() {
+        tabBar.setTabBarItemClickListener(new EmojiconScrollTabBar.EaseScrollTabBarItemClickListener() {
             @Override
-            public void onUnzipSuccess(DefaultGifEmoji[] defaultGifEmojis) {
-                initDefault(defaultGifEmojis);
+            public void onItemClick(int position) {
+                pagerView.setGroupPostion(position);
             }
         });
 
@@ -81,35 +72,13 @@ public class EmojiconMenu extends EmojiconMenuBase {
         tabBar.setSendBtnListener(sendBtnListener);
     }
 
-    private void initDefault(DefaultGifEmoji[] defaultGifEmojis) {
-        emojiconGroupList = new ArrayList<>();
-        emojiconGroupList.add(new EmojiconGroupEntity(R.drawable.common_emoj_smile,
-                Arrays.asList(defaultGifEmojis)));
-        for (EmojiconGroupEntity groupEntity : emojiconGroupList) {
-            tabBar.addTab(groupEntity.getIcon());
-        }
-
-        pagerView.setPagerViewListener(new EmojiconPagerViewListener());
-        pagerView.init(emojiconGroupList, emojiconColumns);
-
-        tabBar.setTabBarItemClickListener(new EmojiconScrollTabBar.EaseScrollTabBarItemClickListener() {
-
-            @Override
-            public void onItemClick(int position) {
-                pagerView.setGroupPostion(position);
-            }
-        });
-
-    }
-
-
     /**
      * 添加表情组
      */
     public void addEmojiconGroup(EmojiconGroupEntity groupEntity) {
         emojiconGroupList.add(groupEntity);
-        pagerView.addEmojiconGroup(groupEntity, true);
         tabBar.addTab(groupEntity.getIcon());
+        pagerView.addEmojiconGroup(groupEntity, true);
     }
 
     /**
@@ -143,9 +112,7 @@ public class EmojiconMenu extends EmojiconMenuBase {
 
         @Override
         public void onPagerViewInited(int groupMaxPageSize, int firstGroupPageSize) {
-            indicatorView.init(groupMaxPageSize);
-            indicatorView.updateIndicator(firstGroupPageSize);
-            tabBar.selectedTo(0);
+
         }
 
         @Override
@@ -167,6 +134,16 @@ public class EmojiconMenu extends EmojiconMenuBase {
         @Override
         public void onGroupMaxPageSizeChanged(int maxCount) {
             indicatorView.updateIndicator(maxCount);
+        }
+
+        @Override
+        public void addEmojiconGroup(int pagerSizeOfGroug) {
+            // 如果是第一次添加执行下边操作
+            if (emojiconGroupList.size() == 1) {
+                tabBar.selectedTo(0);
+                indicatorView.updateIndicator(pagerSizeOfGroug);
+                indicatorView.selectTo(0);
+            }
         }
 
         @Override

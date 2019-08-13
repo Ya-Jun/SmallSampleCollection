@@ -7,7 +7,7 @@ public class EmojiconGroupEntity {
     /**
      * 表情数据
      */
-    private List<DefaultGifEmoji> defaultGifEmojiList;
+    private List<Emoji> defaultGifEmojiList;
     /**
      * 图片
      */
@@ -21,17 +21,17 @@ public class EmojiconGroupEntity {
     public EmojiconGroupEntity() {
     }
 
-    public EmojiconGroupEntity(int icon, List<DefaultGifEmoji> defaultGifEmojiList) {
+    public EmojiconGroupEntity(int icon, List<Emoji> defaultGifEmojiList) {
         this.icon = icon;
         this.defaultGifEmojiList = defaultGifEmojiList;
     }
 
 
-    public List<DefaultGifEmoji> getDefaultGifEmojiList() {
+    public List<Emoji> getDefaultGifEmojiList() {
         return defaultGifEmojiList;
     }
 
-    public void setDefaultGifEmojiList(List<DefaultGifEmoji> defaultGifEmojiList) {
+    public void setDefaultGifEmojiList(List<Emoji> defaultGifEmojiList) {
         this.defaultGifEmojiList = defaultGifEmojiList;
     }
 

@@ -87,7 +87,7 @@ public class EmojiconPagerView extends ViewPager {
      * 获取表情组的gridview list
      */
     public List<View> getGroupGridViews(EmojiconGroupEntity groupEntity) {
-        List<DefaultGifEmoji> defaultGifEmojiList = groupEntity.getDefaultGifEmojiList();
+        List<Emoji> defaultGifEmojiList = groupEntity.getDefaultGifEmojiList();
         int itemSize = emojiconColumns * emojiconRows - 1;
         int totalSize = defaultGifEmojiList.size();
         int pageSize = totalSize % itemSize == 0 ? totalSize / itemSize : totalSize / itemSize + 1;
@@ -138,6 +138,11 @@ public class EmojiconPagerView extends ViewPager {
         if (pagerAdapter != null && notifyDataChange) {
             pagerAdapter.notifyDataSetChanged();
         }
+
+        // 添加表情组
+        if (pagerViewListener != null) {
+            pagerViewListener.addEmojiconGroup(pageSize);
+        }
     }
 
     /**
@@ -154,7 +159,7 @@ public class EmojiconPagerView extends ViewPager {
 
 
     private int getPageSize(EmojiconGroupEntity groupEntity) {
-        List<DefaultGifEmoji> defaultGifEmojiList = groupEntity.getDefaultGifEmojiList();
+        List<Emoji> defaultGifEmojiList = groupEntity.getDefaultGifEmojiList();
         int itemSize = emojiconColumns * emojiconRows - 1;
         int totalSize = defaultGifEmojiList.size();
         return totalSize % itemSize == 0 ? totalSize / itemSize : totalSize / itemSize + 1;
@@ -245,6 +250,10 @@ public class EmojiconPagerView extends ViewPager {
          */
         void onGroupMaxPageSizeChanged(int maxCount);
 
+        /**
+         * 动态添加表情组成功
+         */
+        void addEmojiconGroup(int pagerSizeOfGroug);
 
         void onExpressionClicked(Emoji emoji);
 

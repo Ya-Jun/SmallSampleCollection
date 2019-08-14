@@ -64,6 +64,6 @@ public class MainActivity extends AppCompatActivity {
     public void addGroup(View view) {
         // 动态添加表情组
         emojiInputView.addEmojiconGroup(new EmojiconGroupEntity(R.drawable.m8,
-                Arrays.asList(EmojiManager.getInstance().getCommonEmojiManager())));
+                Arrays.asList(EmojiManager.getInstance().getCommonEmojiManager()),true));
     }
 }

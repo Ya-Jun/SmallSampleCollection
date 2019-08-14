@@ -17,15 +17,18 @@ public class EmojiconGroupEntity {
      */
     private String name;
 
-
-    public EmojiconGroupEntity() {
-    }
+    private boolean isBigEmoji = false;
 
     public EmojiconGroupEntity(int icon, List<Emoji> defaultGifEmojiList) {
         this.icon = icon;
         this.defaultGifEmojiList = defaultGifEmojiList;
     }
 
+    public EmojiconGroupEntity(int icon, List<Emoji> defaultGifEmojiList, boolean isBigEmoji) {
+        this.icon = icon;
+        this.defaultGifEmojiList = defaultGifEmojiList;
+        this.isBigEmoji = isBigEmoji;
+    }
 
     public List<Emoji> getDefaultGifEmojiList() {
         return defaultGifEmojiList;
@@ -51,5 +54,11 @@ public class EmojiconGroupEntity {
         this.name = name;
     }
 
+    public boolean isBigEmoji() {
+        return isBigEmoji;
+    }
 
+    public void setBigEmoji(boolean bigEmoji) {
+        isBigEmoji = bigEmoji;
+    }
 }

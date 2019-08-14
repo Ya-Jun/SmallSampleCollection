@@ -20,7 +20,9 @@ public class EmojiconPagerView extends ViewPager {
     private List<EmojiconGroupEntity> groupEntities;
     private PagerAdapter pagerAdapter;
     private int emojiconRows = 3;
-    private int emojiconColumns = 7;
+    private int emojiconColumns;
+    private int bigEmojiconRows = 2;
+    private int bigEmojiconColumns;
     private int firstGroupPageSize;
     private int maxPageCount;
     private int previousPagerPosition;
@@ -37,13 +39,14 @@ public class EmojiconPagerView extends ViewPager {
     }
 
 
-    public void init(List<EmojiconGroupEntity> emojiconGroupList, int emijiconColumns) {
+    public void init(List<EmojiconGroupEntity> emojiconGroupList, int emijiconColumns, int bigEmojiconColumns) {
         if (emojiconGroupList == null) {
             throw new RuntimeException("emojiconGroupList is null");
         }
 
         this.groupEntities = emojiconGroupList;
         this.emojiconColumns = emijiconColumns;
+        this.bigEmojiconColumns = bigEmojiconColumns;
 
         viewpages = new ArrayList<>();
         for (int i = 0; i < groupEntities.size(); i++) {
@@ -88,14 +91,23 @@ public class EmojiconPagerView extends ViewPager {
      */
     public List<View> getGroupGridViews(EmojiconGroupEntity groupEntity) {
         List<Emoji> defaultGifEmojiList = groupEntity.getDefaultGifEmojiList();
-        int itemSize = emojiconColumns * emojiconRows - 1;
+        int itemSize;
+        if (groupEntity.isBigEmoji()) {
+            itemSize = bigEmojiconColumns * bigEmojiconRows - 1;
+        } else {
+            itemSize = emojiconColumns * emojiconRows - 1;
+        }
         int totalSize = defaultGifEmojiList.size();
         int pageSize = totalSize % itemSize == 0 ? totalSize / itemSize : totalSize / itemSize + 1;
         List<View> views = new ArrayList<View>();
         for (int i = 0; i < pageSize; i++) {
             View view = View.inflate(context, R.layout.common_emoj_expression_gridview, null);
             GridView gv = view.findViewById(R.id.gridview);
-            gv.setNumColumns(emojiconColumns);
+            if (groupEntity.isBigEmoji()) {
+                gv.setNumColumns(bigEmojiconColumns);
+            } else {
+                gv.setNumColumns(emojiconColumns);
+            }
             List<Emoji> list = new ArrayList<>();
             if (i != pageSize - 1) {
                 list.addAll(defaultGifEmojiList.subList(i * itemSize, (i + 1) * itemSize));
@@ -160,7 +172,12 @@ public class EmojiconPagerView extends ViewPager {
 
     private int getPageSize(EmojiconGroupEntity groupEntity) {
         List<Emoji> defaultGifEmojiList = groupEntity.getDefaultGifEmojiList();
-        int itemSize = emojiconColumns * emojiconRows - 1;
+        int itemSize;
+        if (groupEntity.isBigEmoji()) {
+            itemSize = bigEmojiconColumns * bigEmojiconRows - 1;
+        } else {
+            itemSize = emojiconColumns * emojiconRows - 1;
+        }
         int totalSize = defaultGifEmojiList.size();
         return totalSize % itemSize == 0 ? totalSize / itemSize : totalSize / itemSize + 1;
     }

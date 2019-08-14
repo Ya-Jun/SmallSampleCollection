@@ -21,6 +21,8 @@ public class EmojiconMenu extends EmojiconMenuBase {
 
     private int emojiconColumns;
     private final static int DEFAULT_COLUMNS = 7;
+    private int bigEmojiconColumns;
+    private final static int DEFAULT_BIG_COLUMNS = 4;
     private EmojiconScrollTabBar tabBar;
     private EmojiconIndicatorView indicatorView;
     private EmojiconPagerView pagerView;
@@ -48,6 +50,7 @@ public class EmojiconMenu extends EmojiconMenuBase {
         LayoutInflater.from(context).inflate(R.layout.common_emoj_widget_emojicon, this);
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EmojiconMenu);
         emojiconColumns = ta.getInt(R.styleable.EmojiconMenu_emojiconColumns, DEFAULT_COLUMNS);
+        bigEmojiconColumns = ta.getInt(R.styleable.EmojiconMenu_bigEmojiconColumns, DEFAULT_BIG_COLUMNS);
         ta.recycle();
 
         pagerView = findViewById(R.id.pager_view);
@@ -56,7 +59,7 @@ public class EmojiconMenu extends EmojiconMenuBase {
 
         emojiconGroupList = new ArrayList<>();
         pagerView.setPagerViewListener(new EmojiconPagerViewListener());
-        pagerView.init(emojiconGroupList, emojiconColumns);
+        pagerView.init(emojiconGroupList, emojiconColumns, bigEmojiconColumns);
 
         tabBar.setTabBarItemClickListener(new EmojiconScrollTabBar.EaseScrollTabBarItemClickListener() {
             @Override

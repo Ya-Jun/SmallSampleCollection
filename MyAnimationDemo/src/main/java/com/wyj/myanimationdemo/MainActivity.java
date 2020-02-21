@@ -11,6 +11,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button buttonView;
     private Button buttonDrawable;
     private Button buttonProperty;
+    private Button buttonInterpolator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,10 +24,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonView = (Button) findViewById(R.id.button_view);
         buttonDrawable = (Button) findViewById(R.id.button_drawable);
         buttonProperty = (Button) findViewById(R.id.button_property);
+        buttonInterpolator = (Button) findViewById(R.id.button_interpolator);
 
         buttonView.setOnClickListener(this);
         buttonDrawable.setOnClickListener(this);
         buttonProperty.setOnClickListener(this);
+        buttonInterpolator.setOnClickListener(this);
     }
 
     @Override
@@ -39,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             MainActivity.this.startActivity(intent);
         } else if (v == buttonProperty) {
 
+        } else if (v == buttonInterpolator) {
+            Intent intent = new Intent(MainActivity.this, InterpolatorCurve.class);
+            MainActivity.this.startActivity(intent);
         }
     }
 }
